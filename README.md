@@ -37,8 +37,6 @@ API sur le port 3000
 
 Gardez cette fenêtre ouverte. Le serveur est maintenant accessible à l'adresse `http://localhost:3000`.
 
-Sur Windows, vous pouvez aussi double-cliquer sur **`DEMARRER-WINDOWS.cmd`** après avoir ouvert Docker Desktop. Il lance la même commande.
-
 Il s'agit d'une API : on lui envoie des demandes pour recevoir des données. Pour l'essayer, suivez les commandes de la section 4. Ouvrir simplement l'adresse dans un navigateur ne donne pas de formulaire ou de page d'accueil.
 
 ### Arrêter et relancer
