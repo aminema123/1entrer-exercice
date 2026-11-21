@@ -1,4 +1,4 @@
-# 1Entrer - Rapports de chantier
+# 1Entrer - Rapports de chantier:
 
 Ce projet permet à un contremaître de remplir un rapport de chantier avec les heures de son équipe. Il peut ensuite retrouver ses rapports et consulter le total des heures. Un admin peut lire tous les rapports de son entreprise.
 
