@@ -1,0 +1,11 @@
+services:
+  api:
+    build: .
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      SEED_DEMO: "true"
+    volumes:
+      - reports-data:/app/data
+volumes:
+  reports-data:

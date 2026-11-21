@@ -1,0 +1,37 @@
+EXERCICE 1ENTRER - GUIDE DE REMISE ET DE LANCEMENT
+
+Ce projet est une API de gestion de rapports de chantier.
+Une API echange des donnees avec un autre programme : elle ne contient
+pas de site web ni de formulaire visuel, conformement au mandat.
+
+POUR LE DESTINATAIRE
+Le README contient les choix techniques, les reponses aux trois questions,
+les comptes de demonstration et les commandes permettant de tester l'API.
+Les fichiers src/ contiennent le code ; tests/ contient les tests automatises.
+
+LANCEMENT WINDOWS AVEC DOCKER DESKTOP DEJA INSTALLE
+1. Extraire le ZIP dans un dossier.
+2. Ouvrir Docker Desktop et attendre que son moteur soit pret.
+3. Double-cliquer sur DEMARRER-WINDOWS.cmd.
+4. Laisser la fenetre ouverte. La premiere execution telecharge et construit
+   l'environnement ; elle demande une connexion Internet.
+5. Utiliser les exemples PowerShell du README pour essayer les fonctions.
+
+Autre possibilite : depuis ce dossier, executer docker compose up --build.
+Le lancement sans Docker avec Node.js est explique dans le README.
+Le port 3000 doit etre disponible : arreter toute autre copie de cette API.
+
+Le README contient aussi les choix du projet et les reponses aux trois
+questions de l'enonce.
+
+Pour lancer les tests dans un autre PowerShell ouvert dans ce dossier :
+docker build --no-cache --progress=plain --target test -t 1entrer-tests .
+
+Resultat attendu : 12 tests reussis, aucun echec, puis compilation reussie.
+
+Temps consacre a l'exercice : 3 heures.
+
+Verification executee avec Docker : construction et demarrage reussis,
+12 tests automatises reussis, controle des types et compilation reussis,
+14 groupes de verification HTTP reussis sur le conteneur final.
+Les rapports et sessions restent conserves apres recreation du conteneur.
