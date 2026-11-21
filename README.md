@@ -8,8 +8,6 @@ Le projet utilise Node.js, TypeScript, Express et SQLite.
 
 **Temps consacré à l'exercice : 3 heures.**
 
-[Lire les réponses aux trois questions de l’exercice](#11-questions-écrites)
-
 ## 1. Lancer le projet avec Docker
 
 C'est la façon prévue pour essayer le projet. Docker prépare l'environnement nécessaire : vous n'avez pas besoin d'installer Node.js ou une base de données séparément.
