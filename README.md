@@ -84,7 +84,7 @@ Ils vérifient notamment :
 
 Le message `Erreur interne: test rollback` est attendu pendant un test : celui-ci provoque volontairement une erreur pour vérifier que rien n'est enregistré à moitié. Un avertissement indiquant que SQLite est expérimental peut aussi apparaître avec Node 22.
 
-Un fichier GitHub Actions lance également les tests, le contrôle TypeScript et la compilation à chaque push ou pull request. Son résultat sera visible dans l'onglet **Actions** du dépôt une fois le projet publié.
+Un fichier GitHub Actions lance également les tests, le contrôle TypeScript et la compilation à chaque push ou pull request. Son résultat se consulte dans l'onglet **Actions** du dépôt.
 
 ## 3. Comptes pour essayer
 
@@ -280,7 +280,50 @@ Les principaux codes de réponse sont : **200** pour une lecture ou connexion r�
 
 Pour rester dans le temps de l'exercice, je n'ai pas ajouté de gestion des comptes, de réinitialisation des mots de passe ou de pagination. La création des tables se fait au démarrage. SQLite et le calcul scrypt sont synchrones : ce fonctionnement suffit pour l'essai, mais mérite d'être revu avant une utilisation avec beaucoup de demandes simultanées. En production, les connexions passeraient aussi par HTTPS.
 
-## 8. Questions écrites
+## 8. Où trouver le code ?
+
+| Fichier | Contenu |
+| --- | --- |
+| `src/database.ts` | Les tables, le calcul des empreintes de mots de passe et les comptes de départ. |
+| `src/app.ts` | Les routes, la validation, la connexion et les droits d'accès. |
+| `src/server.ts` | Le démarrage de l'API et l'ouverture du fichier SQLite. |
+| `tests/api.test.ts` | Les 12 tests automatisés. |
+| `Dockerfile` | La préparation de l'environnement pour l'API et les tests. |
+| `compose.yaml` | Le lancement de l'API, son port et le volume qui conserve la base. |
+| `.github/workflows/tests.yml` | Les vérifications lancées par GitHub Actions. |
+
+## 9. Lancer sans Docker, pour travailler sur le code
+
+Cette option demande Node.js **22.13 ou plus récent dans la branche 22**, avec npm. Pour simplement essayer le projet, les instructions Docker du début suffisent.
+
+Dans PowerShell, depuis le dossier du projet :
+
+```powershell
+npm.cmd ci
+npm.cmd run check
+npm.cmd test
+npm.cmd run build
+$env:SEED_DEMO = 'true'
+npm.cmd start
+```
+
+Pour le développement, `npm.cmd run dev` peut remplacer la compilation et le démarrage, une fois les dépendances installées et `SEED_DEMO` défini. Sur Linux ou macOS, utilisez `npm` à la place de `npm.cmd` et `SEED_DEMO=true npm start` après la compilation.
+
+| Variable facultative | Valeur par défaut sans Docker | Rôle |
+| --- | --- | --- |
+| `PORT` | `3000` | Le port sur lequel écoute l'API. |
+| `DB_PATH` | `./data/reports.sqlite` | L'emplacement du fichier SQLite. |
+| `SEED_DEMO` | Désactivé | Mettre `true` pour créer les comptes de démonstration. Docker Compose le fait déjà. |
+
+La base locale et celle de Docker sont séparées : les rapports et jetons de l'une ne sont pas automatiquement présents dans l'autre. Arrêtez la première API avant de lancer l'autre sur le même port.
+
+## 10. Vérifications réalisées
+
+La construction et le démarrage avec Docker Compose ont été vérifiés. Les 12 tests, le contrôle TypeScript et la compilation ont réussi dans Docker. L'API du conteneur a aussi passé 14 groupes de vérification par de vraies requêtes HTTP : connexion des quatre comptes, création, totaux, accents, droits, séparation entre A et B et réponses aux données incorrectes. Les rapports et sessions étaient toujours présents après suppression puis recréation du conteneur en conservant son volume.
+
+Le workflow GitHub Actions a également été exécuté avec succès sur GitHub : installation des dépendances, contrôle TypeScript, tests et compilation. Le [résultat de cette exécution est consultable ici](https://github.com/aminema123/1entrer-exercice/actions/runs/44909781511). Le fichier `.github/workflows/tests.yml` relance ces vérifications à chaque push ou pull request.
+
+## 11. Questions écrites
 
 ### 1. Comment mettre cette API en production sur AWS pour environ 60 entreprises ?
 
@@ -307,46 +350,3 @@ Je commencerais par limiter les tentatives de connexion et rendre le calcul des 
 Je compléterais les tests avec de la charge et un démarrage Docker automatique dans GitHub Actions. Pour plusieurs instances de l'API, je passerais à PostgreSQL. J'ajouterais aussi la déconnexion et la révocation des sessions, puis une procédure de sauvegarde avec des essais de restauration.
 
 Enfin, je demanderais au métier s'il faut limiter le nombre de rapports par jour et comment identifier les travailleurs pour contrôler le cumul de leurs heures. Ces règles auraient besoin d'être précisées avant de les ajouter au code.
-
-## 9. Où trouver le code ?
-
-| Fichier | Contenu |
-| --- | --- |
-| `src/database.ts` | Les tables, le calcul des empreintes de mots de passe et les comptes de départ. |
-| `src/app.ts` | Les routes, la validation, la connexion et les droits d'accès. |
-| `src/server.ts` | Le démarrage de l'API et l'ouverture du fichier SQLite. |
-| `tests/api.test.ts` | Les 12 tests automatisés. |
-| `Dockerfile` | La préparation de l'environnement pour l'API et les tests. |
-| `compose.yaml` | Le lancement de l'API, son port et le volume qui conserve la base. |
-| `.github/workflows/tests.yml` | Les vérifications lancées par GitHub Actions. |
-
-## 10. Lancer sans Docker, pour travailler sur le code
-
-Cette option demande Node.js **22.13 ou plus récent dans la branche 22**, avec npm. Pour simplement essayer le projet, les instructions Docker du début suffisent.
-
-Dans PowerShell, depuis le dossier du projet :
-
-```powershell
-npm.cmd ci
-npm.cmd run check
-npm.cmd test
-npm.cmd run build
-$env:SEED_DEMO = 'true'
-npm.cmd start
-```
-
-Pour le développement, `npm.cmd run dev` peut remplacer la compilation et le démarrage, une fois les dépendances installées et `SEED_DEMO` défini. Sur Linux ou macOS, utilisez `npm` à la place de `npm.cmd` et `SEED_DEMO=true npm start` après la compilation.
-
-| Variable facultative | Valeur par défaut sans Docker | Rôle |
-| --- | --- | --- |
-| `PORT` | `3000` | Le port sur lequel écoute l'API. |
-| `DB_PATH` | `./data/reports.sqlite` | L'emplacement du fichier SQLite. |
-| `SEED_DEMO` | Désactivé | Mettre `true` pour créer les comptes de démonstration. Docker Compose le fait déjà. |
-
-La base locale et celle de Docker sont séparées : les rapports et jetons de l'une ne sont pas automatiquement présents dans l'autre. Arrêtez la première API avant de lancer l'autre sur le même port.
-
-## 11. Vérifications réalisées
-
-La construction et le démarrage avec Docker Compose ont été vérifiés. Les 12 tests, le contrôle TypeScript et la compilation ont réussi dans Docker. L'API du conteneur a aussi passé 14 groupes de vérification par de vraies requêtes HTTP : connexion des quatre comptes, création, totaux, accents, droits, séparation entre A et B et réponses aux données incorrectes. Les rapports et sessions étaient toujours présents après suppression puis recréation du conteneur en conservant son volume.
-
-Le fichier `.github/workflows/tests.yml` lance automatiquement l'installation, le contrôle TypeScript, les tests et la compilation à chaque push ou pull request. Le résultat se consulte dans l'onglet **Actions** du dépôt GitHub, en ouvrant le workflow **Tests**.
