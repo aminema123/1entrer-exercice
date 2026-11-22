@@ -290,38 +290,13 @@ Pour rester dans le temps de l'exercice, je n'ai pas ajouté de gestion des comp
 | `compose.yaml` | Le lancement de l'API, son port et le volume qui conserve la base. |
 | `.github/workflows/tests.yml` | Les vérifications lancées par GitHub Actions. |
 
-## 9. Lancer sans Docker, pour travailler sur le code
-
-Cette option demande Node.js **22.13 ou plus récent dans la branche 22**, avec npm. Pour simplement essayer le projet, les instructions Docker du début suffisent.
-
-Dans PowerShell, depuis le dossier du projet :
-
-```powershell
-npm.cmd ci
-npm.cmd run check
-npm.cmd test
-npm.cmd run build
-$env:SEED_DEMO = 'true'
-npm.cmd start
-```
-
-Pour le développement, `npm.cmd run dev` peut remplacer la compilation et le démarrage, une fois les dépendances installées et `SEED_DEMO` défini. Sur Linux ou macOS, utilisez `npm` à la place de `npm.cmd` et `SEED_DEMO=true npm start` après la compilation.
-
-| Variable facultative | Valeur par défaut sans Docker | Rôle |
-| --- | --- | --- |
-| `PORT` | `3000` | Le port sur lequel écoute l'API. |
-| `DB_PATH` | `./data/reports.sqlite` | L'emplacement du fichier SQLite. |
-| `SEED_DEMO` | Désactivé | Mettre `true` pour créer les comptes de démonstration. Docker Compose le fait déjà. |
-
-La base locale et celle de Docker sont séparées : les rapports et jetons de l'une ne sont pas automatiquement présents dans l'autre. Arrêtez la première API avant de lancer l'autre sur le même port.
-
-## 10. Vérifications réalisées
+## 9. Vérifications réalisées
 
 La construction et le démarrage avec Docker Compose ont été vérifiés. Les 12 tests, le contrôle TypeScript et la compilation ont réussi dans Docker. L'API du conteneur a aussi passé 14 groupes de vérification par de vraies requêtes HTTP : connexion des quatre comptes, création, totaux, accents, droits, séparation entre A et B et réponses aux données incorrectes. Les rapports et sessions étaient toujours présents après suppression puis recréation du conteneur en conservant son volume.
 
 Le workflow GitHub Actions a également été exécuté avec succès sur GitHub : installation des dépendances, contrôle TypeScript, tests et compilation. Le [résultat de cette exécution est consultable ici](https://github.com/aminema123/1entrer-exercice/actions/runs/44909781511). Le fichier `.github/workflows/tests.yml` relance ces vérifications à chaque push ou pull request.
 
-## 11. Questions écrites
+## 10. Questions écrites
 
 ### 1. Comment mettre cette API en production sur AWS pour environ 60 entreprises ?
 
